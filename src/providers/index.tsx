@@ -7,6 +7,18 @@ import { HeaderThemeProvider } from './HeaderTheme'
 import { ThemeProvider } from './Theme'
 import { SonnerProvider } from '@/providers/Sonner'
 
+const currenciesConfig = {
+  defaultCurrency: 'EUR',
+  supportedCurrencies: [
+    {
+      code: 'EUR',
+      decimals: 2,
+      label: 'Euro',
+      symbol: '€',
+    },
+  ],
+}
+
 export const Providers: React.FC<{
   children: React.ReactNode
 }> = ({ children }) => {
@@ -17,6 +29,7 @@ export const Providers: React.FC<{
           <SonnerProvider />
           <EcommerceProvider
             enableVariants={true}
+            currenciesConfig={currenciesConfig}
             api={{
               cartsFetchQuery: {
                 depth: 2,
@@ -26,10 +39,12 @@ export const Providers: React.FC<{
                     title: true,
                     gallery: true,
                     inventory: true,
+                    priceInEUR: true,
                   },
                   variants: {
                     title: true,
                     inventory: true,
+                    priceInEUR: true,
                   },
                 },
               },
