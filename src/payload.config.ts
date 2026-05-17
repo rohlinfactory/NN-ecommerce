@@ -1,4 +1,4 @@
-import { sqliteAdapter } from '@payloadcms/db-sqlite'
+import { postgresAdapter } from '@payloadcms/db-postgres'
 
 import {
   BoldFeature,
@@ -40,9 +40,9 @@ export default buildConfig({
     user: Users.slug,
   },
   collections: [Users, Pages, Posts, Categories, Tags, DiscountCodes, NewsletterSubscribers, Media],
-  db: sqliteAdapter({
-    client: {
-      url: process.env.SQLITE_URL || `file:${path.resolve(dirname, '../data/nakednative.db')}`,
+  db: postgresAdapter({
+    pool: {
+      connectionString: process.env.NEON_DATABASE_URL || process.env.DATABASE_URL || '',
     },
   }),
   editor: lexicalEditor({
