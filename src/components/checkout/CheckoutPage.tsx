@@ -25,6 +25,7 @@ import { AddressItem } from '@/components/addresses/AddressItem'
 import { FormItem } from '@/components/forms/FormItem'
 import { toast } from 'sonner'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
+import { DiscountCodeInput, type AppliedDiscount } from '@/components/checkout/DiscountCodeInput'
 
 const apiKey = `${process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}`
 const stripe = loadStripe(apiKey)
@@ -35,6 +36,7 @@ export const CheckoutPage: React.FC = () => {
   const { cart } = useCart()
   const [error, setError] = useState<null | string>(null)
   const { theme } = useTheme()
+  const [appliedDiscount, setAppliedDiscount] = useState<AppliedDiscount | null>(null)
   /**
    * State to manage the email input for guest checkout.
    */
@@ -122,7 +124,7 @@ export const CheckoutPage: React.FC = () => {
     return (
       <div className="prose dark:prose-invert py-12 w-full items-center">
         <p>Your cart is empty.</p>
-        <Link href="/search">Continue shopping?</Link>
+        <Link href="/shop">Continue shopping?</Link>
       </div>
     )
   }
@@ -366,21 +368,21 @@ export const CheckoutPage: React.FC = () => {
               if (!quantity) return null
 
               let image = gallery?.[0]?.image || meta?.image
-              let price = product?.priceInUSD
+              let price = product?.priceInEUR
 
               const isVariant = Boolean(variant) && typeof variant === 'object'
 
               if (isVariant) {
-                price = variant?.priceInUSD
+                price = variant?.priceInEUR
 
-                const imageVariant = product.gallery?.find((item) => {
+                const imageVariant = product.gallery?.find((item: any) => {
                   if (!item.variantOption) return false
                   const variantOptionID =
                     typeof item.variantOption === 'object'
                       ? item.variantOption.id
                       : item.variantOption
 
-                  const hasMatch = variant?.options?.some((option) => {
+                  const hasMatch = variant?.options?.some((option: any) => {
                     if (typeof option === 'object') return option.id === variantOptionID
                     else return option === variantOptionID
                   })
@@ -408,7 +410,7 @@ export const CheckoutPage: React.FC = () => {
                       {variant && typeof variant === 'object' && (
                         <p className="text-sm font-mono text-primary/50 tracking-widest">
                           {variant.options
-                            ?.map((option) => {
+                            ?.map((option: any) => {
                               if (typeof option === 'object') return option.label
                               return null
                             })
@@ -429,9 +431,24 @@ export const CheckoutPage: React.FC = () => {
             return null
           })}
           <hr />
+          <DiscountCodeInput
+            cartTotal={cart.subtotal || 0}
+            appliedDiscount={appliedDiscount}
+            onApply={setAppliedDiscount}
+            onRemove={() => setAppliedDiscount(null)}
+          />
+          {appliedDiscount && (
+            <div className="flex justify-between items-center text-sm text-muted-foreground">
+              <span>Discount</span>
+              <span>-<Price amount={appliedDiscount.discountAmount} /></span>
+            </div>
+          )}
           <div className="flex justify-between items-center gap-2">
             <span className="uppercase">Total</span>{' '}
-            <Price className="text-3xl font-medium" amount={cart.subtotal || 0} />
+            <Price
+              className="text-3xl font-medium"
+              amount={Math.max(0, (cart.subtotal || 0) - (appliedDiscount?.discountAmount || 0))}
+            />
           </div>
         </div>
       )}

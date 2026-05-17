@@ -7,6 +7,7 @@ import { ecommercePlugin } from '@payloadcms/plugin-ecommerce'
 
 import { stripeAdapter } from '@payloadcms/plugin-ecommerce/payments/stripe'
 
+import { sendOrderConfirmation } from '@/collections/hooks/sendOrderConfirmation'
 import { Page, Post, Product } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 import { ProductsCollection } from '@/collections/Products'
@@ -17,7 +18,7 @@ import { isAdmin } from '@/access/isAdmin'
 import { isDocumentOwner } from '@/access/isDocumentOwner'
 
 const generateTitle: GenerateTitle<Product | Page | Post> = ({ doc }) => {
-  return doc?.title ? `${doc.title} | NakedNative` : 'NakedNative'
+  return doc?.title || 'NakedNative'
 }
 
 const generateURL: GenerateURL<Product | Page | Post> = ({ doc }) => {
@@ -101,6 +102,13 @@ export const plugins: Plugin[] = [
     orders: {
       ordersCollectionOverride: ({ defaultCollection }) => ({
         ...defaultCollection,
+        hooks: {
+          ...defaultCollection.hooks,
+          afterChange: [
+            ...(defaultCollection.hooks?.afterChange || []),
+            sendOrderConfirmation,
+          ],
+        },
         fields: [
           ...defaultCollection.fields,
           {

@@ -1,10 +1,64 @@
+# NakedNative
+
+Ponchos, surf gear, and clothing for those who live free.
+
+Built on [PayloadCMS](https://payloadcms.com) + Next.js.
+
+## Getting Started
+
+```bash
+pnpm install
+cp .env.example .env   # then fill in your keys
+pnpm dev               # http://localhost:3000
+```
+
+## Setting Up Payments (Stripe)
+
+1. Create a [Stripe account](https://dashboard.stripe.com/register) (or use an existing one)
+2. Go to **Developers > API keys** in the Stripe dashboard
+3. Copy your **test mode** keys into `.env`:
+
+```
+STRIPE_SECRET_KEY=sk_test_your_key_here
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_key_here
+```
+
+4. Set up webhooks for local development:
+
+```bash
+# Install Stripe CLI: https://docs.stripe.com/stripe-cli
+brew install stripe/stripe-cli/stripe
+
+# Login and forward webhooks
+stripe login
+stripe listen --forward-to localhost:3000/api/payments/stripe/webhooks
+```
+
+5. Copy the webhook signing secret from the CLI output into `.env`:
+
+```
+STRIPE_WEBHOOKS_SIGNING_SECRET=whsec_your_secret_here
+```
+
+6. Restart the dev server. Checkout should now work with [Stripe test cards](https://docs.stripe.com/testing#cards) (e.g. `4242 4242 4242 4242`).
+
+## Testing
+
+```bash
+pnpm test:int          # Vitest unit/integration tests
+pnpm test:e2e          # Playwright browser tests (needs dev server)
+pnpm test              # Run both
+```
+
+## Admin Panel
+
+Visit `/admin` to manage products, orders, blog posts, discount codes, and site content.
+
+---
+
 # Payload Ecommerce Template
 
-This template is in **BETA**.
-
-This is the official [Payload Ecommerce Template](https://github.com/payloadcms/payload/blob/main/templates/ecommerce). This repo includes a fully-working backend, enterprise-grade admin panel, and a beautifully designed, production-ready ecommerce website.
-
-This template is right for you if you are working on building an ecommerce project or shop with Payload.
+This is built on the official [Payload Ecommerce Template](https://github.com/payloadcms/payload/blob/main/templates/ecommerce).
 
 Core features:
 

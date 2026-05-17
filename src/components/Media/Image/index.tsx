@@ -49,7 +49,7 @@ export const Image: React.FC<MediaProps> = (props) => {
 
     const filename = fullFilename
 
-    src = `${process.env.NEXT_PUBLIC_SERVER_URL}${url}`
+    src = url || ''
   }
 
   // NOTE: this is used by the browser to determine which image to download at different screen sizes
@@ -58,6 +58,16 @@ export const Image: React.FC<MediaProps> = (props) => {
     : Object.entries(breakpoints)
         .map(([, value]) => `(max-width: ${value}px) ${value}px`)
         .join(', ')
+
+  if (!src) {
+    return (
+      <div
+        className={cn('flex items-center justify-center bg-muted text-muted-foreground', imgClassName)}
+        style={fill ? { position: 'absolute', inset: 0 } : { width: width || 80, height: height || 80 }}
+        aria-label={alt || 'No image'}
+      />
+    )
+  }
 
   return (
     <NextImage

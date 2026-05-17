@@ -24,11 +24,13 @@ export default async function BlogPage() {
   })
 
   return (
-    <div className="container py-16">
-      <h1 className="text-4xl font-bold tracking-tight mb-4">Blog</h1>
-      <p className="text-muted-foreground text-lg mb-12 max-w-2xl">
-        Stories from the NakedNative community — surf, travel, and life outdoors.
-      </p>
+    <div className="container pt-10 pb-20">
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold tracking-tight">Blog</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Stories from the NakedNative community — surf, travel, and life outdoors.
+        </p>
+      </div>
 
       {posts.docs.length === 0 ? (
         <p className="text-muted-foreground">No posts yet. Check back soon.</p>

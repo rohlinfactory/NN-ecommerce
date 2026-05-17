@@ -21,13 +21,12 @@ export default async function Login() {
 
   return (
     <div className="container">
-      <div className="max-w-xl mx-auto my-12">
+      <div className="max-w-md mx-auto py-16">
         <RenderParams />
 
-        <h1 className="mb-4 text-[1.8rem]">Log in</h1>
-        <p className="mb-8">
-          {`This is where your customers will login to manage their account, review their order history, and more. To manage all users, `}
-          <Link href="/admin/collections/users">login to the admin dashboard</Link>.
+        <h1 className="mb-2 text-2xl font-semibold tracking-tight">Log in</h1>
+        <p className="mb-8 text-sm text-muted-foreground">
+          Sign in to track your orders, manage your account, and more.
         </p>
         <LoginForm />
       </div>

@@ -20,10 +20,12 @@ export default async function CreateAccount() {
   }
 
   return (
-    <div className="container py-16">
-      <h1 className="text-xl mb-4">Create Account</h1>
-      <RenderParams />
-      <CreateAccountForm />
+    <div className="container">
+      <div className="max-w-md mx-auto py-16">
+        <h1 className="text-2xl font-semibold tracking-tight mb-2">Create Account</h1>
+        <RenderParams />
+        <CreateAccountForm />
+      </div>
     </div>
   )
 }

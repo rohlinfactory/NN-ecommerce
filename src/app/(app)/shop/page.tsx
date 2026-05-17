@@ -5,7 +5,7 @@ import { getPayload } from 'payload'
 import React from 'react'
 
 export const metadata = {
-  description: 'Search for products in the store.',
+  description: 'Browse ponchos, surf gear, and clothing from NakedNative.',
   title: 'Shop',
 }
 
@@ -28,7 +28,7 @@ export default async function ShopPage({ searchParams }: Props) {
       slug: true,
       gallery: true,
       categories: true,
-      priceInUSD: true,
+      priceInEUR: true,
     },
     ...(sort ? { sort } : { sort: 'title' }),
     ...(searchValue || category
@@ -77,21 +77,28 @@ export default async function ShopPage({ searchParams }: Props) {
 
   return (
     <div>
-      {searchValue ? (
-        <p className="mb-4">
-          {products.docs?.length === 0
-            ? 'There are no products that match '
-            : `Showing ${products.docs.length} ${resultsText} for `}
-          <span className="font-bold">&quot;{searchValue}&quot;</span>
-        </p>
-      ) : null}
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold tracking-tight">Shop</h1>
+        {searchValue ? (
+          <p className="mt-1 text-sm text-muted-foreground">
+            {products.docs?.length === 0
+              ? 'No products match '
+              : `${products.docs.length} ${resultsText} for `}
+            <span className="font-semibold text-foreground">&quot;{searchValue}&quot;</span>
+          </p>
+        ) : (
+          <p className="mt-1 text-sm text-muted-foreground">
+            Ponchos, surf gear, and clothing for those who live free.
+          </p>
+        )}
+      </div>
 
       {!searchValue && products.docs?.length === 0 && (
-        <p className="mb-4">No products found. Please try different filters.</p>
+        <p className="text-sm text-muted-foreground">No products found. Check back soon.</p>
       )}
 
       {products?.docs.length > 0 ? (
-        <Grid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Grid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {products.docs.map((product) => {
             return <ProductGridItem key={product.id} product={product} />
           })}

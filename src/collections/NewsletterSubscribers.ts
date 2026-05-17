@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { adminOnly } from '@/access/adminOnly'
+import { sendNewsletterWelcome } from '@/collections/hooks/sendNewsletterWelcome'
 
 export const NewsletterSubscribers: CollectionConfig = {
   slug: 'newsletter-subscribers',
@@ -13,6 +14,9 @@ export const NewsletterSubscribers: CollectionConfig = {
     read: adminOnly,
     update: adminOnly,
     delete: adminOnly,
+  },
+  hooks: {
+    afterChange: [sendNewsletterWelcome],
   },
   fields: [
     {

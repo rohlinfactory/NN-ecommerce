@@ -11,9 +11,9 @@ type Props = {
 }
 
 export const ProductGridItem: React.FC<Props> = ({ product }) => {
-  const { gallery, priceInUSD, title } = product
+  const { gallery, priceInEUR, title } = product
 
-  let price = priceInUSD
+  let price = priceInEUR
 
   const variants = product.variants?.docs
 
@@ -22,10 +22,10 @@ export const ProductGridItem: React.FC<Props> = ({ product }) => {
     if (
       variant &&
       typeof variant === 'object' &&
-      variant?.priceInUSD &&
-      typeof variant.priceInUSD === 'number'
+      variant?.priceInEUR &&
+      typeof variant.priceInEUR === 'number'
     ) {
-      price = variant.priceInUSD
+      price = variant.priceInEUR
     }
   }
 
@@ -34,27 +34,26 @@ export const ProductGridItem: React.FC<Props> = ({ product }) => {
 
   return (
     <Link className="relative inline-block h-full w-full group" href={`/products/${product.slug}`}>
-      {image ? (
-        <Media
-          className={clsx(
-            'relative aspect-square object-cover border rounded-2xl p-8 bg-primary-foreground',
-          )}
-          height={80}
-          imgClassName={clsx('h-full w-full object-cover rounded-2xl', {
-            'transition duration-300 ease-in-out group-hover:scale-102': true,
-          })}
-          resource={image}
-          width={80}
-        />
-      ) : null}
+      <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-muted">
+        {image ? (
+          <Media
+            className="relative h-full w-full"
+            height={480}
+            imgClassName={clsx('h-full w-full object-cover', {
+              'transition duration-500 ease-out group-hover:scale-[1.03]': true,
+            })}
+            resource={image}
+            width={360}
+          />
+        ) : (
+          <div className="h-full w-full bg-muted" />
+        )}
+      </div>
 
-      <div className="font-mono text-primary/50 group-hover:text-primary flex justify-between items-center mt-4">
-        <div>{title}</div>
-
+      <div className="mt-3">
+        <span className="text-sm font-medium text-foreground">{title}</span>
         {typeof price === 'number' && (
-          <div className="">
-            <Price amount={price} />
-          </div>
+          <Price amount={price} className="block text-sm text-muted-foreground mt-0.5" />
         )}
       </div>
     </Link>

@@ -7,15 +7,15 @@ import React, { Suspense } from 'react'
 export default function ShopLayout({ children }: { children: React.ReactNode }) {
   return (
     <Suspense fallback={null}>
-      <div className="container flex flex-col gap-8 my-16 pb-4 ">
+      <div className="container pt-10 pb-20">
         <Search className="mb-8" />
 
-        <div className="flex flex-col md:flex-row items-start justify-between gap-16 md:gap-4">
-          <div className="w-full flex-none flex flex-col gap-4 md:gap-8 basis-1/5">
+        <div className="flex flex-col md:flex-row items-start gap-10">
+          <aside className="w-full flex-none flex flex-col gap-6 md:w-48 lg:w-56">
             <Categories />
             <FilterList list={sorting} title="Sort by" />
-          </div>
-          <div className="min-h-screen w-full">{children}</div>
+          </aside>
+          <div className="min-h-[50vh] w-full">{children}</div>
         </div>
       </div>
     </Suspense>
