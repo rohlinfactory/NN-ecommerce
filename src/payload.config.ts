@@ -1,4 +1,5 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 
 import {
   BoldFeature,
@@ -82,7 +83,17 @@ export default buildConfig({
   }),
   endpoints: [],
   globals: [Header, Footer],
-  plugins,
+  plugins: [
+    ...plugins,
+    ...(process.env.BLOB_READ_WRITE_TOKEN
+      ? [
+          vercelBlobStorage({
+            collections: { media: true },
+            token: process.env.BLOB_READ_WRITE_TOKEN,
+          }),
+        ]
+      : []),
+  ],
   secret: process.env.PAYLOAD_SECRET || '',
   sharp,
   typescript: {
