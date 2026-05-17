@@ -44,3 +44,6 @@ public/media
 # cursor
 .cursor/
 
+# sqlite database
+/data/
+
